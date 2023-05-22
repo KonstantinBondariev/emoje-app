@@ -28,6 +28,25 @@
   color: #61dafb;
 }
 
+.container {
+  width: 1024px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: gainsboro;
+}
+
+.emojies {
+  display: flex;  
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.emoji {
+  width: 30%;
+  padding: 5px;
+  background-color: #fff;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
