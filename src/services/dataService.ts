@@ -1,9 +1,9 @@
-import { Iemojie } from '../types/Iemoji';
+import { Iemoji } from '../types/Iemoji';
 
 export class DataService {
   constructor(private url: string) {}
 
-  getData(): Promise<Iemojie[]> {
+  getData(): Promise<Iemoji[]> {
     return fetch(this.url)
       .then((response) => response.json())
       .then((data) => {

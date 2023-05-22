@@ -1,4 +1,4 @@
-export interface Iemojie {
+export interface Iemoji {
   title: string,
   symbol: string,
   keywords: string,

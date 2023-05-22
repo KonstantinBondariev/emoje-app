@@ -1,15 +1,16 @@
-// import React from "react";
-import { Iemojie } from "../types/Iemoji"
+import React, {useState} from "react";
+import { Iemoji } from "../types/Iemoji"
 
 interface EmojeProps {
-  emoji:Iemojie
+  emoji:Iemoji
 }
 
 export function Emoji(props:EmojeProps) {
 
-  const containerStyle = {
-    // display: 'flex'
-  }
+  const [details, setDetails] = useState(false)
+
+  // const btnClasses = ['btn', btnBGClassName ]
+
 
   const emojiStyle = {
     fontSize: '24px',
@@ -26,10 +27,22 @@ export function Emoji(props:EmojeProps) {
   };
 
   return (
-    <div >
+    <div>
       <div style={emojiStyle}>{props.emoji.symbol}</div>
       <div style={titleStyle}>{props.emoji.title}</div>
-      <div style={keywordsStyle}>{props.emoji.keywords}</div>
+
+      <button
+      className='btn'
+      onClick={()=>setDetails(prev => ! prev)}
+      style = {!details? {background: "	#4169E1" , color: '#FFDAB9'}:{background: '#FFDAB9', color: '#4169E1'}}
+      >
+        {!details ? 'Show': 'Hide'}
+      </button>
+
+      {details && 
+      <div style={keywordsStyle}>
+        {props.emoji.keywords}
+      </div>}
     </div>
   );
 }
