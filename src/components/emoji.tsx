@@ -9,9 +9,6 @@ export function Emoji(props:EmojeProps) {
 
   const [details, setDetails] = useState(false)
 
-  // const btnClasses = ['btn', btnBGClassName ]
-
-
   const emojiStyle = {
     fontSize: '24px',
     marginBottom: '8px',
@@ -27,7 +24,7 @@ export function Emoji(props:EmojeProps) {
   };
 
   return (
-    <div>
+    <div className="emoji-item">
       <div style={emojiStyle}>{props.emoji.symbol}</div>
       <div style={titleStyle}>{props.emoji.title}</div>
 

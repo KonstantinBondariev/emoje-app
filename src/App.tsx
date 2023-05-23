@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
 import {Emoji} from './components/emoji'
 import {DataService} from './services/dataService'
 import { Iemoji } from './types/Iemoji';
 import  EmojiForm  from './components/EmojiForm'
-
 
 const dataService = new DataService('/emojiList.json')
 
@@ -16,7 +14,6 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTermIsShort, setSearchTermIsShort] = useState(true)
   const [searchResults, setSearchResults] = useState<Iemoji[]>([]);
-
 
   useEffect(() => {
     getData();
@@ -62,11 +59,8 @@ function App() {
   }; 
 
   const handleFormSubmit = (newEmoji:Iemoji) => {
-
-    const newData = [...data]
-    newData.unshift(newEmoji);
-    console.log(newData, 'newdata0');
-    
+    const newData = [...data];
+    newData.unshift(newEmoji);  
     setData(newData);
   };
   
@@ -77,14 +71,20 @@ function App() {
       <EmojiForm onFormSubmit={handleFormSubmit} />
     </div>
 
+    <hr />
+
+      <div className='search-block'>        
       <div className='input-block'>
+        <label className='input-block__label'>Search:</label>
         <input
+          className='input-block__input'
           type="text"
           value={searchTerm}
           onChange={handleSearch}
           placeholder="Search by keywords"
         />
-      </div>   
+      </div>
+      </div>         
 
       <h1>Emojies:</h1> 
 
@@ -93,8 +93,13 @@ function App() {
         {data.slice(0,50).map((emoji, index) => (
           <div className='emoji'>
             <h2>{index +1}</h2>
+
             <Emoji key={index} emoji={emoji} />
-            <button className='btn' onClick={() => removeEmoji(index)}>Remove</button>
+
+            <button className='btn' 
+                    onClick={() => removeEmoji(index)}>
+                      Remove
+            </button>
           </div>
           ))}
         </div>
@@ -109,7 +114,7 @@ function App() {
           </div>
           ))}
         </div>
-      </div>}     
+      </div>}  
 
    </div>
   )  

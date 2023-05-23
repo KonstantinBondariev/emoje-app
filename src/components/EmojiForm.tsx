@@ -25,15 +25,26 @@ function EmojiForm({ onFormSubmit}:any) {
     <h2>Add Emoji</h2>
     <div className='input-block'>
       <label className='input-block__label'>Title:</label>
-      <input className='input-block__input' type="text" value={title} onChange={(event) => setTitle(event.target.value)} required />
+      <input className='input-block__input'
+             type="text" 
+             value={title} 
+             onChange={(event) => setTitle(event.target.value)} 
+             required />
     </div>
     <div className='input-block'>
       <label className='input-block__label'>Symbol:</label>
-      <input className='input-block__input' type="text" value={symbol} onChange={(event) => setSymbol(event.target.value)} required />
+      <input className='input-block__input' 
+             type="text" 
+             value={symbol} 
+             onChange={(event) => setSymbol(event.target.value)} 
+             required />
     </div>
     <div className='input-block'>
       <label className='input-block__label'>Keywords:</label>
-      <input className='input-block__input' type="text" value={keywords} onChange={(event) => setKeywords(event.target.value)} required />
+      <input className='input-block__input' 
+             type="text" value={keywords} 
+             onChange={(event) => setKeywords(event.target.value)} 
+             required />
     </div>
     <button type="submit" className='btn'>Add</button>
   </form>

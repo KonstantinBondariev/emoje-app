@@ -53,8 +53,16 @@
   background-color: #fff;
 }
 
+.emoji-item {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .btn {
   width: 200px;
+  margin-bottom: 1rem;
   padding: 0.5rem 1rem;
   border: none;
   font-weight: 400;
@@ -65,10 +73,14 @@
 }
 .form {
   width: 50%;
-  padding: 20px;
+  /* padding: 20px; */
   display: flex;
   flex-direction: column;
   gap:20px
+}
+
+.search-block{
+  width: 50%;
 }
 
 .input-block {
