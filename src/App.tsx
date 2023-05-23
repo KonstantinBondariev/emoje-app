@@ -5,6 +5,7 @@ import './App.css';
 import {Emoji} from './components/emoji'
 import {DataService} from './services/dataService'
 import { Iemoji } from './types/Iemoji';
+import  EmojiForm  from './components/EmojiForm'
 
 
 const dataService = new DataService('/emojiList.json')
@@ -15,6 +16,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTermIsShort, setSearchTermIsShort] = useState(true)
   const [searchResults, setSearchResults] = useState<Iemoji[]>([]);
+
 
   useEffect(() => {
     getData();
@@ -52,9 +54,29 @@ function App() {
       console.error(error);
     }
   };
+
+  const removeEmoji = (index:number) => {
+    const newData = data.filter((_, i) => i !== index);
+    console.log(newData);    
+    setData(newData);
+  }; 
+
+  const handleFormSubmit = (newEmoji:Iemoji) => {
+
+    const newData = [...data]
+    newData.unshift(newEmoji);
+    console.log(newData, 'newdata0');
+    
+    setData(newData);
+  };
   
   return (   
     <div className='container'>
+
+    <div>
+      <EmojiForm onFormSubmit={handleFormSubmit} />
+    </div>
+
       <div className='input-block'>
         <input
           type="text"
@@ -72,6 +94,7 @@ function App() {
           <div className='emoji'>
             <h2>{index +1}</h2>
             <Emoji key={index} emoji={emoji} />
+            <button className='btn' onClick={() => removeEmoji(index)}>Remove</button>
           </div>
           ))}
         </div>
