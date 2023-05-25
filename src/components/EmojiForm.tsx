@@ -2,14 +2,18 @@ import React, { ReactEventHandler, useState } from 'react';
 import { Iemoji } from '../types/Iemoji';
 import { IEmojieForm } from '../types/IEmojiForm';
 
-function EmojiForm({ onFormSubmit}:any) {
+interface IemojiProps {
+  onFormSubmit:any
+}
+
+function EmojiForm({ onFormSubmit}:IemojiProps) {
   const [title, setTitle] = useState('');
   const [symbol, setSymbol] = useState('');
   const [keywords, setKeywords] = useState('');
 
   const handleSubmit = (event:any) => {
     event.preventDefault();
-    const newEmoji = {
+    const newEmoji:Iemoji = {
       title,
       symbol,
       keywords,

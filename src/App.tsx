@@ -6,14 +6,13 @@ import {DataService} from './services/dataService'
 import { Iemoji } from './types/Iemoji';
 import  EmojiForm  from './components/EmojiForm'
 
-const dataService = new DataService('/emojiList.json')
+const dataService = new DataService()
 
 function App() {
 
   const [data, setData] = useState<Iemoji[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchTermIsShort, setSearchTermIsShort] = useState(true)
-  const [searchResults, setSearchResults] = useState<Iemoji[]>([]);
+  const [searchTermIsShort, setSearchTermIsShort] = useState(false)
 
   useEffect(() => {
     getData();
@@ -21,8 +20,8 @@ function App() {
 
   const getData = async () => {
     try {
-      const responseData: Iemoji[] = await dataService.getData();
-      setData(responseData);
+      const responseData: Iemoji[]= await dataService.getData();
+      if(responseData) setData(responseData.reverse()); 
     } catch (error) {
       console.error(error);
     }
@@ -32,40 +31,47 @@ function App() {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
 
-    if (value.length > 3) {
+    if (value.length >= 3) {
       setSearchTermIsShort(false)
       getFilteredData()
-    } else {
+    } 
+    else {
+      getData()
       setSearchTermIsShort(true)
     }
   };
 
   const getFilteredData = async () => {
     try {
-      const responseData: Iemoji[] = await dataService.getData();
-      const results = responseData.filter(
+      const results = data.filter(
         (emoji) => emoji.keywords.toLowerCase().includes(searchTerm)
       );
-      setSearchResults(results);
+      setData(results);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const removeEmoji = (index:number) => {
-    const newData = data.filter((_, i) => i !== index);
-    console.log(newData);    
-    setData(newData);
+  const removeEmoji =  async (key:string) => {
+       try {
+      await dataService.deleteData(key); 
+      getData(); 
+    } catch (error) {
+      console.log(error);
+    }     
   }; 
 
-  const handleFormSubmit = (newEmoji:Iemoji) => {
-    const newData = [...data];
-    newData.unshift(newEmoji);  
-    setData(newData);
+  const handleFormSubmit = async (newEmoji:Iemoji) => {
+        try {
+          await dataService.postData(newEmoji); 
+          getData(); 
+        } catch (error) {
+          console.log(error);
+        }   
   };
   
   return (   
-    <div className='container'>
+    <div className='container'>   
 
     <div>
       <EmojiForm onFormSubmit={handleFormSubmit} />
@@ -83,41 +89,34 @@ function App() {
           onChange={handleSearch}
           placeholder="Search by keywords"
         />
+        {searchTermIsShort && <div>
+          must be more then 2 symbols
+        </div>}
       </div>
       </div>         
 
       <h1>Emojies:</h1> 
 
-      {searchTermIsShort && <div>
+       <div>
         <div className='emojies'>
         {data.slice(0,50).map((emoji, index) => (
           <div className='emoji'>
             <h2>{index +1}</h2>
 
-            <Emoji key={index} emoji={emoji} />
+            <Emoji key={emoji.key} emoji={emoji} />
 
             <button className='btn' 
-                    onClick={() => removeEmoji(index)}>
+                    onClick={() => emoji.key? removeEmoji(emoji.key): null}>
                       Remove
             </button>
           </div>
           ))}
         </div>
-      </div>} 
-
-      {!searchTermIsShort && <div>
-        <div className='emojies'>
-        {searchResults.map((emoji, index) => (
-          <div className='emoji'>
-            <h2>{index +1}</h2>
-            <Emoji key={index} emoji={emoji} />
-          </div>
-          ))}
-        </div>
-      </div>}  
-
+      </div>
    </div>
   )  
 }
 
 export default App;
+
+
