@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {Emoji} from './components/emoji'
 import {DataService} from './services/dataService'
@@ -11,12 +10,14 @@ const dataService = new DataService()
 function App() {
 
   const [data, setData] = useState<Iemoji[]>([]);
+  const [filtredData, setFiltredData] = useState<Iemoji[]>([])
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchTermIsShort, setSearchTermIsShort] = useState(false)
+  const [searchTermIsShort, setSearchTermIsShort] = useState(true)
 
   useEffect(() => {
     getData();
-  }, []);
+    getFilteredData();
+  }, [searchTerm]);
 
   const getData = async () => {
     try {
@@ -27,29 +28,28 @@ function App() {
     }
   };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.toLowerCase();
-    setSearchTerm(value);
-
-    if (value.length >= 3) {
-      setSearchTermIsShort(false)
-      getFilteredData()
-    } 
-    else {
-      getData()
-      setSearchTermIsShort(true)
-    }
+  const handleSearch =  (event: React.ChangeEvent<HTMLInputElement>) => {
+    
+      const value = event.target.value.toLowerCase();
+       setSearchTerm(value);
+      
+      
+      if (value.length >= 3 ) {
+        getFilteredData()
+        setSearchTermIsShort(false)  
+      } 
+      else {
+        setSearchTermIsShort(true)
+        setFiltredData([])
+      }
+    
   };
 
-  const getFilteredData = async () => {
-    try {
-      const results = data.filter(
-        (emoji) => emoji.keywords.toLowerCase().includes(searchTerm)
-      );
-      setData(results);
-    } catch (error) {
-      console.error(error);
-    }
+  const getFilteredData =  () => {
+    const results = data.filter((emoji) =>
+    emoji.keywords.toLowerCase().includes(searchTerm)
+  );
+  setFiltredData(results);
   };
 
   const removeEmoji =  async (key:string) => {
@@ -97,7 +97,7 @@ function App() {
 
       <h1>Emojies:</h1> 
 
-       <div>
+       { searchTermIsShort &&<div>
         <div className='emojies'>
         {data.slice(0,50).map((emoji, index) => (
           <div className='emoji'>
@@ -112,7 +112,25 @@ function App() {
           </div>
           ))}
         </div>
-      </div>
+      </div>}
+
+      {searchTerm && !searchTermIsShort && <div>
+        <div className='emojies'>
+        {filtredData.slice(0,50).map((emoji, index) => (
+          <div className='emoji'>
+            <h2>{index +1}</h2>
+
+            <Emoji key={emoji.key} emoji={emoji} />
+
+            <button className='btn' 
+                    onClick={() => emoji.key? removeEmoji(emoji.key): null}>
+                      Remove
+            </button>
+          </div>
+          ))}
+        </div>
+      </div>}
+
    </div>
   )  
 }
